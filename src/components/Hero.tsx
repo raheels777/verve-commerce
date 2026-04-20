@@ -126,16 +126,29 @@ const Hero = () => {
                   {slide.subtitle}
                 </p>
                 <div className="flex flex-wrap gap-3">
-                  <Link to={slide.ctaLink}>
-                    <motion.button
-                      whileHover={{ scale: 1.05, y: -2 }}
-                      whileTap={{ scale: 0.97 }}
-                      className="ripple group inline-flex items-center gap-2 bg-gradient-primary text-primary-foreground px-7 py-3.5 rounded-full font-semibold shadow-glow hover:shadow-glow-purple transition-shadow"
-                    >
-                      {slide.cta}
-                      <ArrowRight className="h-4 w-4 group-hover:translate-x-1 transition-transform" />
-                    </motion.button>
-                  </Link>
+                  {slide.external ? (
+                    <a href={slide.ctaLink} target="_blank" rel="noopener noreferrer sponsored">
+                      <motion.button
+                        whileHover={{ scale: 1.05, y: -2 }}
+                        whileTap={{ scale: 0.97 }}
+                        className="ripple group inline-flex items-center gap-2 bg-gradient-primary text-primary-foreground px-7 py-3.5 rounded-full font-semibold shadow-glow hover:shadow-glow-purple transition-shadow"
+                      >
+                        {slide.cta}
+                        <ArrowRight className="h-4 w-4 group-hover:translate-x-1 transition-transform" />
+                      </motion.button>
+                    </a>
+                  ) : (
+                    <Link to={slide.ctaLink}>
+                      <motion.button
+                        whileHover={{ scale: 1.05, y: -2 }}
+                        whileTap={{ scale: 0.97 }}
+                        className="ripple group inline-flex items-center gap-2 bg-gradient-primary text-primary-foreground px-7 py-3.5 rounded-full font-semibold shadow-glow hover:shadow-glow-purple transition-shadow"
+                      >
+                        {slide.cta}
+                        <ArrowRight className="h-4 w-4 group-hover:translate-x-1 transition-transform" />
+                      </motion.button>
+                    </Link>
+                  )}
                 </div>
               </motion.div>
             </AnimatePresence>
