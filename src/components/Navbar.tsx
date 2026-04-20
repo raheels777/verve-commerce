@@ -42,7 +42,7 @@ const Navbar = () => {
         className={`sticky top-0 z-50 transition-all duration-500 ${scrolled ? "bg-background/95 shadow-soft border-b border-border" : "bg-background border-b border-border"}`}
         style={{ backdropFilter: "blur(20px)" }}
       >
-        <div className="container flex items-center gap-2 sm:gap-4 h-14 sm:h-16 md:h-20">
+        <div className="container flex items-center gap-2 sm:gap-4 h-16 sm:h-20 md:h-24 lg:h-28">
           <Link to="/" aria-label="DealzGalaxy home" className="shrink-0">
             <Logo />
           </Link>
