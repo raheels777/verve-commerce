@@ -116,7 +116,7 @@ const Navbar = () => {
                 onClick={onClick}
                 whileHover={{ scale: 1.1 }}
                 whileTap={{ scale: 0.95 }}
-                className="relative h-10 w-10 flex items-center justify-center rounded-full hover:bg-muted transition-colors"
+                className="relative h-9 w-9 sm:h-10 sm:w-10 flex items-center justify-center rounded-full hover:bg-muted transition-colors"
               >
                 <Icon className="h-5 w-5 text-foreground" />
                 {badge > 0 && (
@@ -130,7 +130,7 @@ const Navbar = () => {
             <button
               aria-label="Menu"
               onClick={() => setMobileOpen((v) => !v)}
-              className="lg:hidden h-10 w-10 flex items-center justify-center rounded-full hover:bg-muted"
+              className="lg:hidden h-9 w-9 sm:h-10 sm:w-10 flex items-center justify-center rounded-full hover:bg-muted"
             >
               {mobileOpen ? <X className="h-5 w-5 text-foreground" /> : <Menu className="h-5 w-5 text-foreground" />}
             </button>
