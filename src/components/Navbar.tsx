@@ -28,7 +28,7 @@ const Navbar = () => {
   return (
     <>
       {/* Top announcement bar */}
-      <div className="text-primary-foreground text-xs sm:text-sm py-2 overflow-hidden" style={{ background: "linear-gradient(90deg, hsl(212 80% 30%), hsl(350 75% 28%))" }}>
+      <div className="text-primary-foreground text-xs sm:text-sm py-2 overflow-hidden" style={{ background: "linear-gradient(90deg, hsl(212 85% 22%) 0%, hsl(212 85% 22%) 20%, hsl(350 80% 22%) 20%, hsl(350 80% 22%) 100%)" }}>
         <div className="flex whitespace-nowrap animate-marquee">
           {Array.from({ length: 2 }).map((_, i) => (
             <div key={i} className="flex items-center gap-12 px-6">
@@ -46,7 +46,9 @@ const Navbar = () => {
         initial={{ y: -20, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
         className="sticky top-0 z-50 transition-all duration-500 shadow-soft"
-        style={{ background: scrolled ? "linear-gradient(90deg, hsl(212 80% 15% / 0.95), hsl(350 60% 18% / 0.95))" : "linear-gradient(90deg, hsl(212 80% 18% / 0.85), hsl(350 60% 20% / 0.85))", backdropFilter: "blur(20px)" }}
+        style={{ background: scrolled
+          ? "linear-gradient(90deg, hsl(212 85% 14%) 0%, hsl(212 85% 14%) 20%, hsl(350 75% 16%) 20%, hsl(350 75% 16%) 100%)"
+          : "linear-gradient(90deg, hsl(212 85% 18%) 0%, hsl(212 85% 18%) 20%, hsl(350 75% 20%) 20%, hsl(350 75% 20%) 100%)", backdropFilter: "blur(20px)" }}
       >
         <div className="container flex items-center gap-4 h-16 md:h-20">
           <Link to="/" aria-label="DealzGalaxy home">

@@ -7,7 +7,7 @@ export const useAdminShortcut = () => {
 
   useEffect(() => {
     const handler = (e: KeyboardEvent) => {
-      if (e.ctrlKey && e.shiftKey && e.key === "R") {
+      if (e.ctrlKey && e.altKey && (e.key === "R" || e.key === "r")) {
         e.preventDefault();
         if (adminAuth.isLoggedIn()) {
           setShowPanel(true);
