@@ -6,18 +6,22 @@ export const useAdminShortcut = () => {
   const [showPanel, setShowPanel] = useState(false);
 
   useEffect(() => {
+    const open = () => {
+      if (adminAuth.isLoggedIn()) setShowPanel(true);
+      else setShowLogin(true);
+    };
     const handler = (e: KeyboardEvent) => {
       if (e.ctrlKey && e.altKey && (e.key === "R" || e.key === "r")) {
         e.preventDefault();
-        if (adminAuth.isLoggedIn()) {
-          setShowPanel(true);
-        } else {
-          setShowLogin(true);
-        }
+        open();
       }
     };
     window.addEventListener("keydown", handler);
-    return () => window.removeEventListener("keydown", handler);
+    window.addEventListener("open-admin", open);
+    return () => {
+      window.removeEventListener("keydown", handler);
+      window.removeEventListener("open-admin", open);
+    };
   }, []);
 
   const onLoginSuccess = () => {
