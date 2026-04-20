@@ -81,8 +81,8 @@ const Hero = () => {
   const slide = slides[idx];
 
   return (
-    <section className="container pt-6">
-      <div className="relative h-[480px] md:h-[560px] rounded-[2rem] overflow-hidden shadow-elegant">
+    <section className="container pt-4 sm:pt-6">
+      <div className="relative h-[360px] sm:h-[440px] md:h-[520px] lg:h-[560px] rounded-2xl sm:rounded-[2rem] overflow-hidden shadow-elegant">
         <AnimatePresence mode="wait">
           <motion.div
             key={idx}
@@ -106,7 +106,7 @@ const Hero = () => {
         </AnimatePresence>
 
         <div className="relative z-10 h-full flex items-center">
-          <div className="max-w-2xl px-6 md:px-14">
+          <div className="max-w-2xl px-5 sm:px-8 md:px-14">
             <AnimatePresence mode="wait">
               <motion.div
                 key={idx}
@@ -119,12 +119,12 @@ const Hero = () => {
                   <span className="h-1.5 w-1.5 rounded-full bg-deal animate-pulse" />
                   {slide.eyebrow}
                 </span>
-                <h1 className="font-display font-black text-5xl md:text-7xl lg:text-8xl leading-[0.9] tracking-tight mb-4">
+                <h1 className="font-display font-black text-3xl sm:text-5xl md:text-7xl lg:text-8xl leading-[0.9] tracking-tight mb-3 sm:mb-4">
                   <span className={`bg-gradient-to-r ${slide.accent} bg-clip-text text-transparent drop-shadow-sm`}>
                     {slide.title}
                   </span>
                 </h1>
-                <p className="text-lg md:text-xl text-foreground/80 mb-8 max-w-md">
+                <p className="text-sm sm:text-lg md:text-xl text-foreground/80 mb-6 sm:mb-8 max-w-md">
                   {slide.subtitle}
                 </p>
                 <div className="flex flex-wrap gap-3">
