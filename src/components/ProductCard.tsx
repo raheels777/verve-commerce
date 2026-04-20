@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
-import { Heart, ShoppingBag, Star, ExternalLink } from "lucide-react";
+import { Heart, Star, Tag } from "lucide-react";
 import { Product, formatINR } from "@/data/products";
 
 const ProductCard = ({ product, index = 0 }: { product: Product; index?: number }) => {
@@ -9,7 +9,12 @@ const ProductCard = ({ product, index = 0 }: { product: Product; index?: number 
 
   const Wrapper = ({ children }: { children: React.ReactNode }) =>
     isExternal ? (
-      <a href={product.affiliateUrl} target="_blank" rel="noopener noreferrer sponsored" className="block">
+      <a
+        href={product.affiliateUrl}
+        target="_blank"
+        rel="noopener noreferrer sponsored"
+        className="block"
+      >
         {children}
       </a>
     ) : (
@@ -45,30 +50,37 @@ const ProductCard = ({ product, index = 0 }: { product: Product; index?: number 
           )}
           <button
             aria-label="Add to wishlist"
-            onClick={(e) => { e.preventDefault(); e.stopPropagation(); }}
+            onClick={(e) => {
+              e.preventDefault();
+              e.stopPropagation();
+            }}
             className="absolute top-3 right-3 h-9 w-9 rounded-full glass flex items-center justify-center opacity-0 group-hover:opacity-100 -translate-y-2 group-hover:translate-y-0 transition-all hover:bg-deal hover:text-primary-foreground"
           >
             <Heart className="h-4 w-4" />
           </button>
-
-          <div className="absolute inset-x-3 bottom-3 translate-y-12 group-hover:translate-y-0 opacity-0 group-hover:opacity-100 transition-all duration-300">
-            <div className="w-full bg-gradient-primary text-primary-foreground rounded-full py-2.5 text-sm font-semibold flex items-center justify-center gap-2 shadow-glow">
-              {isExternal ? (<><ExternalLink className="h-4 w-4" /> Buy on {product.store || "Store"}</>) : (<><ShoppingBag className="h-4 w-4" /> View Product</>)}
-            </div>
-          </div>
         </div>
 
         <div className="p-4">
-          <p className="text-[11px] uppercase tracking-wider text-muted-foreground font-semibold mb-1">{product.brand}</p>
-          <h3 className="text-sm font-medium line-clamp-1 mb-2">{product.title}</h3>
-          <div className="flex items-center justify-between">
+          <p className="text-[11px] uppercase tracking-wider text-muted-foreground font-semibold mb-1">
+            {product.brand}
+          </p>
+          <h3 className="text-sm font-medium line-clamp-2 mb-2 min-h-[2.5rem]">
+            {product.title}
+          </h3>
+          <div className="flex items-center justify-between mb-3">
             <div className="flex items-baseline gap-1.5">
               <span className="font-display font-bold">{formatINR(product.price)}</span>
-              <span className="text-xs text-muted-foreground line-through">{formatINR(product.mrp)}</span>
+              <span className="text-xs text-muted-foreground line-through">
+                {formatINR(product.mrp)}
+              </span>
             </div>
             <div className="flex items-center gap-1 text-xs font-semibold bg-success/10 text-success px-2 py-0.5 rounded-full">
               <Star className="h-3 w-3 fill-current" /> {product.rating}
             </div>
+          </div>
+
+          <div className="w-full bg-gradient-primary text-primary-foreground rounded-full py-2.5 text-sm font-semibold flex items-center justify-center gap-2 shadow-glow group-hover:shadow-elegant transition-shadow">
+            <Tag className="h-4 w-4" /> Get Deal
           </div>
         </div>
       </Wrapper>
