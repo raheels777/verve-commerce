@@ -37,7 +37,7 @@ const Navbar = () => {
   return (
     <>
       {/* Top announcement bar */}
-      <div className="text-primary-foreground text-xs sm:text-sm py-2 overflow-hidden" style={{ background: "linear-gradient(90deg, hsl(212 80% 28%) 0%, hsl(280 60% 26%) 50%, hsl(350 75% 28%) 100%)" }}>
+      <div className="bg-foreground text-background text-xs sm:text-sm py-2 overflow-hidden">
         <div className="flex whitespace-nowrap animate-marquee">
           {promos.length > 0 && Array.from({ length: 2 }).map((_, i) => (
             <div key={i} className="flex items-center gap-12 px-6">
@@ -121,13 +121,14 @@ const Navbar = () => {
           {/* Icons */}
           <div className="flex items-center gap-1 ml-auto">
             {[
-              { icon: Heart, badge: 3, label: "Wishlist" },
-              { icon: ShoppingBag, badge: 5, label: "Cart" },
-              { icon: User, badge: 0, label: "Profile" },
-            ].map(({ icon: Icon, badge, label }) => (
+              { icon: Heart, badge: 3, label: "Wishlist", onClick: () => {} },
+              { icon: ShoppingBag, badge: 5, label: "Cart", onClick: () => {} },
+              { icon: User, badge: 0, label: "Profile", onClick: () => window.dispatchEvent(new Event("open-admin")) },
+            ].map(({ icon: Icon, badge, label, onClick }) => (
               <motion.button
                 key={label}
                 aria-label={label}
+                onClick={onClick}
                 whileHover={{ scale: 1.1 }}
                 whileTap={{ scale: 0.95 }}
                 className="relative h-10 w-10 flex items-center justify-center rounded-full hover:bg-muted transition-colors"

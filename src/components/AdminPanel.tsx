@@ -4,6 +4,7 @@ import { X, Plus, Trash2, Edit3, Save, LogOut, Package, Sparkles, Megaphone, Rot
 import { adminAuth, productStore, promoStore, type PromoItem } from "@/store/adminStore";
 import type { Product } from "@/data/products";
 import { parseAffiliateUrl } from "@/lib/productParser";
+import { fetchProductDetails } from "@/lib/priceFetcher";
 
 const emptyProduct: Omit<Product, "id"> = {
   img: "",
@@ -46,33 +47,48 @@ const AdminPanel = ({ open, onClose }: { open: boolean; onClose: () => void }) =
   const handleScrapeUrl = async () => {
     if (!scrapeUrl.trim()) return;
     setScraping(true);
-    setTimeout(() => {
-      const parsed = parseAffiliateUrl(scrapeUrl);
-      if (!parsed) {
-        setScraping(false);
-        return;
-      }
-      const prefilled: Omit<Product, "id"> = {
-        img: parsed.img || "",
-        brand: parsed.brand,
-        title: parsed.title,
-        price: 0,
-        mrp: 0,
-        rating: 4.5,
-        reviews: 0,
-        category: parsed.category,
-        subcategory: parsed.subcategory,
-        store: parsed.store,
-        hot: false,
-        description: "",
-        highlights: [""],
-        affiliateUrl: parsed.affiliateUrl,
-        images: parsed.images || [],
-      };
-      setEditing(prefilled);
+    const parsed = parseAffiliateUrl(scrapeUrl);
+    if (!parsed) {
       setScraping(false);
-      setScrapeUrl("");
-    }, 300);
+      return;
+    }
+    // Try to fetch live price/title/image via CORS proxy
+    let livePrice = 0;
+    let liveMrp = 0;
+    let liveTitle = parsed.title;
+    let liveImg = parsed.img || "";
+    try {
+      const fetched = await fetchProductDetails(scrapeUrl);
+      if (fetched) {
+        if (fetched.price) livePrice = fetched.price;
+        if (fetched.mrp) liveMrp = fetched.mrp;
+        if (fetched.title) liveTitle = fetched.title;
+        if (fetched.image) liveImg = fetched.image;
+      }
+    } catch {
+      // Proxy failed — user can still fill manually
+    }
+
+    const prefilled: Omit<Product, "id"> = {
+      img: liveImg,
+      brand: parsed.brand,
+      title: liveTitle,
+      price: livePrice,
+      mrp: liveMrp || livePrice,
+      rating: 4.5,
+      reviews: 0,
+      category: parsed.category,
+      subcategory: parsed.subcategory,
+      store: parsed.store,
+      hot: false,
+      description: "",
+      highlights: [""],
+      affiliateUrl: parsed.affiliateUrl,
+      images: parsed.images || [],
+    };
+    setEditing(prefilled);
+    setScraping(false);
+    setScrapeUrl("");
   };
 
   const handleSave = () => {
@@ -212,8 +228,8 @@ const AdminPanel = ({ open, onClose }: { open: boolean; onClose: () => void }) =
                     </motion.button>
                   </div>
                   <p className="text-[11px] text-white/50 mt-2 leading-relaxed">
-                    ✅ <b>Auto-detect</b>: Store, brand, category, ASIN/Product-ID, aur Amazon ka product image auto-fill.
-                    <br/>📝 <b>Manual</b>: Price, MRP, exact title — browser CORS ki wajah se fetch nahi hota.
+                    ✅ <b>Auto-fetch</b>: Title, <b>price</b>, MRP, image — sab kuch live Amazon/Flipkart se aa jayega (CORS proxy ke through).
+                    <br/>⚠️ Agar proxy down ho ya page block kare, toh manual fill kar sakte ho.
                   </p>
                 </div>
 
