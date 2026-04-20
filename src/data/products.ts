@@ -20,6 +20,8 @@ export type Product = {
   hot?: boolean;
   description: string;
   highlights: string[];
+  affiliateUrl?: string; // Amazon/Flipkart/external link — if set, clicking the product opens this in a new tab
+  images?: string[]; // optional gallery (first one falls back to `img`)
 };
 
 export const products: Product[] = [
