@@ -16,6 +16,7 @@ type Slide = {
   cta: string;
   ctaLink: string;
   accent: string;
+  external?: boolean;
 };
 
 const defaultSlides: Slide[] = [
@@ -51,11 +52,12 @@ const defaultSlides: Slide[] = [
 const productToSlide = (p: Product): Slide => ({
   image: p.img || hero1,
   eyebrow: `New · ${p.brand}`,
-  title: p.title.toUpperCase(),
-  subtitle: p.description.slice(0, 60) + "…",
-  cta: "View Product",
-  ctaLink: `/product/${p.id}`,
+  title: (p.title || "Untitled").toUpperCase(),
+  subtitle: (p.description || "").slice(0, 60) + (p.description && p.description.length > 60 ? "…" : ""),
+  cta: p.affiliateUrl ? `Buy on ${p.store || "Store"}` : "View Product",
+  ctaLink: p.affiliateUrl || `/product/${p.id}`,
   accent: "from-primary to-primary-glow",
+  external: !!p.affiliateUrl,
 });
 
 const Hero = () => {
@@ -126,16 +128,29 @@ const Hero = () => {
                   {slide.subtitle}
                 </p>
                 <div className="flex flex-wrap gap-3">
-                  <Link to={slide.ctaLink}>
-                    <motion.button
-                      whileHover={{ scale: 1.05, y: -2 }}
-                      whileTap={{ scale: 0.97 }}
-                      className="ripple group inline-flex items-center gap-2 bg-gradient-primary text-primary-foreground px-7 py-3.5 rounded-full font-semibold shadow-glow hover:shadow-glow-purple transition-shadow"
-                    >
-                      {slide.cta}
-                      <ArrowRight className="h-4 w-4 group-hover:translate-x-1 transition-transform" />
-                    </motion.button>
-                  </Link>
+                  {slide.external ? (
+                    <a href={slide.ctaLink} target="_blank" rel="noopener noreferrer sponsored">
+                      <motion.button
+                        whileHover={{ scale: 1.05, y: -2 }}
+                        whileTap={{ scale: 0.97 }}
+                        className="ripple group inline-flex items-center gap-2 bg-gradient-primary text-primary-foreground px-7 py-3.5 rounded-full font-semibold shadow-glow hover:shadow-glow-purple transition-shadow"
+                      >
+                        {slide.cta}
+                        <ArrowRight className="h-4 w-4 group-hover:translate-x-1 transition-transform" />
+                      </motion.button>
+                    </a>
+                  ) : (
+                    <Link to={slide.ctaLink}>
+                      <motion.button
+                        whileHover={{ scale: 1.05, y: -2 }}
+                        whileTap={{ scale: 0.97 }}
+                        className="ripple group inline-flex items-center gap-2 bg-gradient-primary text-primary-foreground px-7 py-3.5 rounded-full font-semibold shadow-glow hover:shadow-glow-purple transition-shadow"
+                      >
+                        {slide.cta}
+                        <ArrowRight className="h-4 w-4 group-hover:translate-x-1 transition-transform" />
+                      </motion.button>
+                    </Link>
+                  )}
                 </div>
               </motion.div>
             </AnimatePresence>

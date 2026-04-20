@@ -14,10 +14,12 @@ const emptyProduct: Omit<Product, "id"> = {
   reviews: 0,
   category: "men",
   subcategory: "",
-  store: "",
+  store: "Amazon",
   hot: false,
   description: "",
   highlights: [""],
+  affiliateUrl: "",
+  images: [],
 };
 
 const AdminPanel = ({ open, onClose }: { open: boolean; onClose: () => void }) => {
@@ -33,27 +35,31 @@ const AdminPanel = ({ open, onClose }: { open: boolean; onClose: () => void }) =
   const handleScrapeUrl = async () => {
     if (!scrapeUrl.trim()) return;
     setScraping(true);
-    // Simulate scraping - in future connect to Firecrawl backend
     setTimeout(() => {
-      const scraped: Omit<Product, "id"> = {
-        img: "https://via.placeholder.com/400x400?text=Scraped+Product",
-        brand: new URL(scrapeUrl).hostname.replace("www.", "").split(".")[0].toUpperCase(),
-        title: "Scraped Product from " + new URL(scrapeUrl).hostname,
-        price: Math.floor(Math.random() * 5000) + 500,
-        mrp: Math.floor(Math.random() * 8000) + 2000,
-        rating: +(Math.random() * 2 + 3).toFixed(1),
-        reviews: Math.floor(Math.random() * 2000),
-        category: "men",
-        subcategory: "accessories",
-        store: new URL(scrapeUrl).hostname.replace("www.", ""),
+      let host = "store";
+      try { host = new URL(scrapeUrl).hostname.replace("www.", ""); } catch {}
+      const storeName = host.includes("amazon") ? "Amazon" : host.includes("flipkart") ? "Flipkart" : host.includes("myntra") ? "Myntra" : host.split(".")[0];
+      const prefilled: Omit<Product, "id"> = {
+        img: "",
+        brand: storeName,
+        title: "",
+        price: 0,
+        mrp: 0,
+        rating: 4.5,
+        reviews: 0,
+        category: "electronics",
+        subcategory: "",
+        store: storeName,
         hot: false,
-        description: "Product scraped from " + scrapeUrl + ". Edit the details as needed.",
-        highlights: ["Scraped product", "Edit details manually"],
+        description: "",
+        highlights: [""],
+        affiliateUrl: scrapeUrl,
+        images: [],
       };
-      setEditing(scraped);
+      setEditing(prefilled);
       setScraping(false);
       setScrapeUrl("");
-    }, 1500);
+    }, 400);
   };
 
   const handleSave = () => {
@@ -116,17 +122,17 @@ const AdminPanel = ({ open, onClose }: { open: boolean; onClose: () => void }) =
             </div>
 
             <div className="p-6 space-y-6">
-              {/* Scrape URL */}
+              {/* Quick add via affiliate URL */}
               <div className="rounded-2xl border border-white/10 p-4 bg-white/5">
                 <h3 className="text-sm font-semibold text-white/80 mb-3 flex items-center gap-2">
-                  <LinkIcon className="h-4 w-4" /> Add Product via URL
+                  <LinkIcon className="h-4 w-4" /> Quick Add — Amazon / Flipkart link
                 </h3>
                 <div className="flex gap-2">
                   <input
                     type="url"
                     value={scrapeUrl}
                     onChange={(e) => setScrapeUrl(e.target.value)}
-                    placeholder="Paste product URL (Amazon, Flipkart, Myntra…)"
+                    placeholder="Paste Amazon/Flipkart product URL…"
                     className="flex-1 h-10 px-4 rounded-xl bg-white/10 text-white placeholder:text-white/30 outline-none border border-white/10 focus:border-primary/60 text-sm"
                   />
                   <motion.button
@@ -135,10 +141,12 @@ const AdminPanel = ({ open, onClose }: { open: boolean; onClose: () => void }) =
                     disabled={scraping}
                     className="px-4 h-10 rounded-xl bg-gradient-primary text-white text-sm font-semibold disabled:opacity-50"
                   >
-                    {scraping ? "Scraping…" : "Fetch"}
+                    {scraping ? "Loading…" : "Start"}
                   </motion.button>
                 </div>
-                <p className="text-[11px] text-white/40 mt-2">Backend scraping will be connected later. Currently creates a placeholder you can edit.</p>
+                <p className="text-[11px] text-white/40 mt-2">
+                  Auto-fetch backend abhi nahi hai. Link paste karo → form khul jayega, manually title/price/image fill karo. Affiliate link save ho jayegi aur user click karte hi seedha Amazon/Flipkart pe jayega (naya tab).
+                </p>
               </div>
 
               {/* Add manually */}
@@ -164,13 +172,14 @@ const AdminPanel = ({ open, onClose }: { open: boolean; onClose: () => void }) =
                       <div className="grid grid-cols-2 gap-3">
                         {[
                           { key: "title", label: "Title", full: true },
+                          { key: "affiliateUrl", label: "Affiliate / Buy Link (Amazon, Flipkart…) — clicking product opens this", full: true },
                           { key: "brand", label: "Brand" },
-                          { key: "store", label: "Store" },
+                          { key: "store", label: "Store (Amazon / Flipkart / Myntra)" },
                           { key: "price", label: "Price (₹)", type: "number" },
                           { key: "mrp", label: "MRP (₹)", type: "number" },
                           { key: "category", label: "Category" },
                           { key: "subcategory", label: "Subcategory" },
-                          { key: "img", label: "Image URL", full: true },
+                          { key: "img", label: "Main Image URL", full: true },
                           { key: "rating", label: "Rating", type: "number" },
                           { key: "reviews", label: "Reviews", type: "number" },
                         ].map(({ key, label, type, full }) => (

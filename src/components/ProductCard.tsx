@@ -1,10 +1,23 @@
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
-import { Heart, ShoppingBag, Star } from "lucide-react";
+import { Heart, ShoppingBag, Star, ExternalLink } from "lucide-react";
 import { Product, formatINR } from "@/data/products";
 
 const ProductCard = ({ product, index = 0 }: { product: Product; index?: number }) => {
   const off = Math.round(((product.mrp - product.price) / product.mrp) * 100);
+  const isExternal = !!product.affiliateUrl;
+
+  const Wrapper = ({ children }: { children: React.ReactNode }) =>
+    isExternal ? (
+      <a href={product.affiliateUrl} target="_blank" rel="noopener noreferrer sponsored" className="block">
+        {children}
+      </a>
+    ) : (
+      <Link to={`/product/${product.id}`} className="block">
+        {children}
+      </Link>
+    );
+
   return (
     <motion.div
       initial={{ opacity: 0, y: 30 }}
@@ -14,7 +27,7 @@ const ProductCard = ({ product, index = 0 }: { product: Product; index?: number 
       whileHover={{ y: -6 }}
       className="group bg-card rounded-3xl overflow-hidden border border-border shadow-soft hover:shadow-elegant transition-all"
     >
-      <Link to={`/product/${product.id}`} className="block">
+      <Wrapper>
         <div className="relative aspect-square overflow-hidden bg-muted">
           <img
             src={product.img}
@@ -25,9 +38,14 @@ const ProductCard = ({ product, index = 0 }: { product: Product; index?: number 
           <span className="absolute top-3 left-3 bg-gradient-deal text-primary-foreground text-xs font-bold px-2.5 py-1 rounded-full shadow-deal">
             -{off}%
           </span>
+          {product.store && (
+            <span className="absolute top-3 left-3 mt-8 bg-background/90 backdrop-blur text-foreground text-[10px] font-semibold px-2 py-0.5 rounded-full border border-border">
+              {product.store}
+            </span>
+          )}
           <button
             aria-label="Add to wishlist"
-            onClick={(e) => e.preventDefault()}
+            onClick={(e) => { e.preventDefault(); e.stopPropagation(); }}
             className="absolute top-3 right-3 h-9 w-9 rounded-full glass flex items-center justify-center opacity-0 group-hover:opacity-100 -translate-y-2 group-hover:translate-y-0 transition-all hover:bg-deal hover:text-primary-foreground"
           >
             <Heart className="h-4 w-4" />
@@ -35,7 +53,7 @@ const ProductCard = ({ product, index = 0 }: { product: Product; index?: number 
 
           <div className="absolute inset-x-3 bottom-3 translate-y-12 group-hover:translate-y-0 opacity-0 group-hover:opacity-100 transition-all duration-300">
             <div className="w-full bg-gradient-primary text-primary-foreground rounded-full py-2.5 text-sm font-semibold flex items-center justify-center gap-2 shadow-glow">
-              <ShoppingBag className="h-4 w-4" /> View Product
+              {isExternal ? (<><ExternalLink className="h-4 w-4" /> Buy on {product.store || "Store"}</>) : (<><ShoppingBag className="h-4 w-4" /> View Product</>)}
             </div>
           </div>
         </div>
@@ -53,7 +71,7 @@ const ProductCard = ({ product, index = 0 }: { product: Product; index?: number 
             </div>
           </div>
         </div>
-      </Link>
+      </Wrapper>
     </motion.div>
   );
 };
