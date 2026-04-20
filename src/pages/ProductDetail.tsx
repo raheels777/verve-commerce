@@ -4,12 +4,14 @@ import { Heart, ShoppingBag, Star, ArrowLeft, Truck, ShieldCheck, RotateCcw, Che
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import { getProduct, formatINR, products } from "@/data/products";
+import { productStore } from "@/store/adminStore";
 import ProductCard from "@/components/ProductCard";
 import { useState } from "react";
 
 const ProductDetail = () => {
   const { id } = useParams();
-  const product = id ? getProduct(id) : undefined;
+  const adminProducts = productStore.getAll();
+  const product = id ? (getProduct(id) || adminProducts.find((p) => p.id === id)) : undefined;
   const [qty, setQty] = useState(1);
 
   if (!product) {
@@ -100,6 +102,14 @@ const ProductDetail = () => {
                 className="ripple flex-1 inline-flex items-center justify-center gap-2 bg-gradient-primary text-primary-foreground px-7 py-3.5 rounded-full font-semibold shadow-glow"
               >
                 <ShoppingBag className="h-4 w-4" /> Add to Cart
+              </motion.button>
+              <motion.button
+                whileHover={{ scale: 1.03 }}
+                whileTap={{ scale: 0.97 }}
+                className="ripple flex-1 inline-flex items-center justify-center gap-2 rounded-full font-semibold px-7 py-3.5 text-primary-foreground"
+                style={{ background: "linear-gradient(135deg, hsl(212 80% 25%), hsl(212 80% 35%))" }}
+              >
+                ⚡ Buy Now
               </motion.button>
               <motion.button
                 whileHover={{ scale: 1.03 }}

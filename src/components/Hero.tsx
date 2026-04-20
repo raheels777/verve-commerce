@@ -1,17 +1,31 @@
 import { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { ArrowRight, ChevronLeft, ChevronRight } from "lucide-react";
+import { Link } from "react-router-dom";
 import hero1 from "@/assets/hero-1.jpg";
 import hero2 from "@/assets/hero-2.jpg";
 import hero3 from "@/assets/hero-3.jpg";
+import { productStore } from "@/store/adminStore";
+import type { Product } from "@/data/products";
 
-const slides = [
+type Slide = {
+  image: string;
+  eyebrow: string;
+  title: string;
+  subtitle: string;
+  cta: string;
+  ctaLink: string;
+  accent: string;
+};
+
+const defaultSlides: Slide[] = [
   {
     image: hero1,
     eyebrow: "Mega Sale · Limited Time",
     title: "FLAT 70% OFF",
     subtitle: "Fashion drop · 2026 collection",
     cta: "Shop Fashion",
+    ctaLink: "/category/men",
     accent: "from-primary to-primary-glow",
   },
   {
@@ -20,6 +34,7 @@ const slides = [
     title: "ELECTRONICS FEST",
     subtitle: "Top brands · upto 65% off + extra 10%",
     cta: "Explore Tech",
+    ctaLink: "/category/electronics",
     accent: "from-secondary to-primary-glow",
   },
   {
@@ -28,17 +43,36 @@ const slides = [
     title: "GLOW SEASON",
     subtitle: "Skincare & makeup · luxe picks",
     cta: "Shop Beauty",
+    ctaLink: "/category/beauty",
     accent: "from-deal to-primary",
   },
 ];
 
+const productToSlide = (p: Product): Slide => ({
+  image: p.img || hero1,
+  eyebrow: `New · ${p.brand}`,
+  title: p.title.toUpperCase(),
+  subtitle: p.description.slice(0, 60) + "…",
+  cta: "View Product",
+  ctaLink: `/product/${p.id}`,
+  accent: "from-primary to-primary-glow",
+});
+
 const Hero = () => {
   const [idx, setIdx] = useState(0);
+  const [slides, setSlides] = useState<Slide[]>(defaultSlides);
+
+  useEffect(() => {
+    const adminProducts = productStore.getLatest(7);
+    if (adminProducts.length > 0) {
+      setSlides(adminProducts.map(productToSlide));
+    }
+  }, []);
 
   useEffect(() => {
     const t = setInterval(() => setIdx((i) => (i + 1) % slides.length), 5500);
     return () => clearInterval(t);
-  }, []);
+  }, [slides.length]);
 
   const next = () => setIdx((i) => (i + 1) % slides.length);
   const prev = () => setIdx((i) => (i - 1 + slides.length) % slides.length);
@@ -69,7 +103,6 @@ const Hero = () => {
           </motion.div>
         </AnimatePresence>
 
-        {/* content */}
         <div className="relative z-10 h-full flex items-center">
           <div className="max-w-2xl px-6 md:px-14">
             <AnimatePresence mode="wait">
@@ -93,28 +126,22 @@ const Hero = () => {
                   {slide.subtitle}
                 </p>
                 <div className="flex flex-wrap gap-3">
-                  <motion.button
-                    whileHover={{ scale: 1.05, y: -2 }}
-                    whileTap={{ scale: 0.97 }}
-                    className="ripple group inline-flex items-center gap-2 bg-gradient-primary text-primary-foreground px-7 py-3.5 rounded-full font-semibold shadow-glow hover:shadow-glow-purple transition-shadow"
-                  >
-                    {slide.cta}
-                    <ArrowRight className="h-4 w-4 group-hover:translate-x-1 transition-transform" />
-                  </motion.button>
-                  <motion.button
-                    whileHover={{ scale: 1.05 }}
-                    whileTap={{ scale: 0.97 }}
-                    className="glass px-7 py-3.5 rounded-full font-semibold hover:bg-white/40 dark:hover:bg-white/10 transition-colors"
-                  >
-                    View Lookbook
-                  </motion.button>
+                  <Link to={slide.ctaLink}>
+                    <motion.button
+                      whileHover={{ scale: 1.05, y: -2 }}
+                      whileTap={{ scale: 0.97 }}
+                      className="ripple group inline-flex items-center gap-2 bg-gradient-primary text-primary-foreground px-7 py-3.5 rounded-full font-semibold shadow-glow hover:shadow-glow-purple transition-shadow"
+                    >
+                      {slide.cta}
+                      <ArrowRight className="h-4 w-4 group-hover:translate-x-1 transition-transform" />
+                    </motion.button>
+                  </Link>
                 </div>
               </motion.div>
             </AnimatePresence>
           </div>
         </div>
 
-        {/* arrows */}
         <button
           onClick={prev}
           aria-label="Previous"
@@ -130,7 +157,6 @@ const Hero = () => {
           <ChevronRight className="h-5 w-5" />
         </button>
 
-        {/* dots */}
         <div className="absolute bottom-6 left-1/2 -translate-x-1/2 flex gap-2 z-20">
           {slides.map((_, i) => (
             <button
