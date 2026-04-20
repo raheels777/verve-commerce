@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import { Heart, ShoppingBag, User, Search, Menu, X, ChevronDown } from "lucide-react";
 import Logo from "./Logo";
+import { promoStore, type PromoItem } from "@/store/adminStore";
 
 const slug = (s: string) => s.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "");
 
@@ -18,11 +19,19 @@ const Navbar = () => {
   const [scrolled, setScrolled] = useState(false);
   const [openMenu, setOpenMenu] = useState<string | null>(null);
   const [mobileOpen, setMobileOpen] = useState(false);
+  const [promos, setPromos] = useState<PromoItem[]>(() => promoStore.getAll());
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 20);
     window.addEventListener("scroll", onScroll);
-    return () => window.removeEventListener("scroll", onScroll);
+    const onPromos = () => setPromos(promoStore.getAll());
+    window.addEventListener("promos-updated", onPromos);
+    window.addEventListener("storage", onPromos);
+    return () => {
+      window.removeEventListener("scroll", onScroll);
+      window.removeEventListener("promos-updated", onPromos);
+      window.removeEventListener("storage", onPromos);
+    };
   }, []);
 
   return (
@@ -30,13 +39,13 @@ const Navbar = () => {
       {/* Top announcement bar */}
       <div className="text-primary-foreground text-xs sm:text-sm py-2 overflow-hidden" style={{ background: "linear-gradient(90deg, hsl(212 80% 28%) 0%, hsl(280 60% 26%) 50%, hsl(350 75% 28%) 100%)" }}>
         <div className="flex whitespace-nowrap animate-marquee">
-          {Array.from({ length: 2 }).map((_, i) => (
+          {promos.length > 0 && Array.from({ length: 2 }).map((_, i) => (
             <div key={i} className="flex items-center gap-12 px-6">
-              <span>🚀 Free Shipping above ₹499</span>
-              <span>🔥 Flat 70% OFF on Fashion</span>
-              <span>💎 New Drops Every Friday</span>
-              <span>🎁 Use code <b>GALAXY10</b> for extra 10% OFF</span>
-              <span>⚡ Flash Sale Ends in 4h</span>
+              {promos.map((p) => (
+                <span key={p.id + "-" + i}>
+                  {p.emoji} <span dangerouslySetInnerHTML={{ __html: p.text }} />
+                </span>
+              ))}
             </div>
           ))}
         </div>
