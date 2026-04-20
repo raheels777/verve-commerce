@@ -104,6 +104,14 @@ const ProductDetail = () => {
               <motion.button
                 whileHover={{ scale: 1.03 }}
                 whileTap={{ scale: 0.97 }}
+                className="ripple flex-1 inline-flex items-center justify-center gap-2 rounded-full font-semibold px-7 py-3.5 text-primary-foreground"
+                style={{ background: "linear-gradient(135deg, hsl(212 80% 25%), hsl(212 80% 35%))" }}
+              >
+                ⚡ Buy Now
+              </motion.button>
+              <motion.button
+                whileHover={{ scale: 1.03 }}
+                whileTap={{ scale: 0.97 }}
                 className="inline-flex items-center justify-center gap-2 glass px-6 py-3.5 rounded-full font-semibold"
               >
                 <Heart className="h-4 w-4" /> Wishlist

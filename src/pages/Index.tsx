@@ -8,8 +8,13 @@ import ProductGrid from "@/components/ProductGrid";
 import FloatingHoardings from "@/components/FloatingHoardings";
 import Testimonials from "@/components/Testimonials";
 import Footer from "@/components/Footer";
+import AdminLoginModal from "@/components/AdminLoginModal";
+import AdminPanel from "@/components/AdminPanel";
+import { useAdminShortcut } from "@/hooks/useAdminShortcut";
 
 const Index = () => {
+  const { showLogin, setShowLogin, showPanel, setShowPanel, onLoginSuccess } = useAdminShortcut();
+
   return (
     <div className="min-h-screen bg-background">
       <Navbar />
@@ -24,6 +29,8 @@ const Index = () => {
       </main>
       <Footer />
       <FloatingHoardings />
+      <AdminLoginModal open={showLogin} onClose={() => setShowLogin(false)} onSuccess={onLoginSuccess} />
+      <AdminPanel open={showPanel} onClose={() => setShowPanel(false)} />
     </div>
   );
 };
