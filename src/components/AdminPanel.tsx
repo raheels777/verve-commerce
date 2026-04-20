@@ -172,13 +172,14 @@ const AdminPanel = ({ open, onClose }: { open: boolean; onClose: () => void }) =
                       <div className="grid grid-cols-2 gap-3">
                         {[
                           { key: "title", label: "Title", full: true },
+                          { key: "affiliateUrl", label: "Affiliate / Buy Link (Amazon, Flipkart…) — clicking product opens this", full: true },
                           { key: "brand", label: "Brand" },
-                          { key: "store", label: "Store" },
+                          { key: "store", label: "Store (Amazon / Flipkart / Myntra)" },
                           { key: "price", label: "Price (₹)", type: "number" },
                           { key: "mrp", label: "MRP (₹)", type: "number" },
                           { key: "category", label: "Category" },
                           { key: "subcategory", label: "Subcategory" },
-                          { key: "img", label: "Image URL", full: true },
+                          { key: "img", label: "Main Image URL", full: true },
                           { key: "rating", label: "Rating", type: "number" },
                           { key: "reviews", label: "Reviews", type: "number" },
                         ].map(({ key, label, type, full }) => (
