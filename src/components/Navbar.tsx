@@ -45,10 +45,8 @@ const Navbar = () => {
       <motion.header
         initial={{ y: -20, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
-        className="sticky top-0 z-50 transition-all duration-500 shadow-soft"
-        style={{ background: scrolled
-          ? "linear-gradient(90deg, hsl(212 80% 18%) 0%, hsl(280 55% 18%) 50%, hsl(350 75% 20%) 100%)"
-          : "linear-gradient(90deg, hsl(212 80% 24%) 0%, hsl(280 55% 24%) 50%, hsl(350 75% 26%) 100%)", backdropFilter: "blur(20px)" }}
+        className={`sticky top-0 z-50 transition-all duration-500 ${scrolled ? "bg-background/95 shadow-soft border-b border-border" : "bg-background border-b border-border"}`}
+        style={{ backdropFilter: "blur(20px)" }}
       >
         <div className="container flex items-center gap-4 h-16 md:h-20">
           <Link to="/" aria-label="DealzGalaxy home">

@@ -1,8 +1,9 @@
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { X, Plus, Trash2, Edit3, Link as LinkIcon, Save, LogOut, Package } from "lucide-react";
+import { X, Plus, Trash2, Edit3, Link as LinkIcon, Save, LogOut, Package, Sparkles } from "lucide-react";
 import { adminAuth, productStore } from "@/store/adminStore";
 import type { Product } from "@/data/products";
+import { parseAffiliateUrl } from "@/lib/productParser";
 
 const emptyProduct: Omit<Product, "id"> = {
   img: "",
@@ -35,31 +36,34 @@ const AdminPanel = ({ open, onClose }: { open: boolean; onClose: () => void }) =
   const handleScrapeUrl = async () => {
     if (!scrapeUrl.trim()) return;
     setScraping(true);
+    // Smart frontend parser — URL se store, ASIN, brand, category, image (Amazon) auto-detect
     setTimeout(() => {
-      let host = "store";
-      try { host = new URL(scrapeUrl).hostname.replace("www.", ""); } catch {}
-      const storeName = host.includes("amazon") ? "Amazon" : host.includes("flipkart") ? "Flipkart" : host.includes("myntra") ? "Myntra" : host.split(".")[0];
+      const parsed = parseAffiliateUrl(scrapeUrl);
+      if (!parsed) {
+        setScraping(false);
+        return;
+      }
       const prefilled: Omit<Product, "id"> = {
-        img: "",
-        brand: storeName,
-        title: "",
+        img: parsed.img || "",
+        brand: parsed.brand,
+        title: parsed.title,
         price: 0,
         mrp: 0,
         rating: 4.5,
         reviews: 0,
-        category: "electronics",
-        subcategory: "",
-        store: storeName,
+        category: parsed.category,
+        subcategory: parsed.subcategory,
+        store: parsed.store,
         hot: false,
         description: "",
         highlights: [""],
-        affiliateUrl: scrapeUrl,
-        images: [],
+        affiliateUrl: parsed.affiliateUrl,
+        images: parsed.images || [],
       };
       setEditing(prefilled);
       setScraping(false);
       setScrapeUrl("");
-    }, 400);
+    }, 300);
   };
 
   const handleSave = () => {
@@ -123,29 +127,31 @@ const AdminPanel = ({ open, onClose }: { open: boolean; onClose: () => void }) =
 
             <div className="p-6 space-y-6">
               {/* Quick add via affiliate URL */}
-              <div className="rounded-2xl border border-white/10 p-4 bg-white/5">
-                <h3 className="text-sm font-semibold text-white/80 mb-3 flex items-center gap-2">
-                  <LinkIcon className="h-4 w-4" /> Quick Add — Amazon / Flipkart link
+              <div className="rounded-2xl border border-primary/30 p-4 bg-gradient-to-br from-primary/10 to-secondary/10">
+                <h3 className="text-sm font-semibold text-white/90 mb-3 flex items-center gap-2">
+                  <Sparkles className="h-4 w-4 text-primary" /> Smart Quick-Add — Amazon / Flipkart / Myntra / Ajio
                 </h3>
                 <div className="flex gap-2">
                   <input
                     type="url"
                     value={scrapeUrl}
                     onChange={(e) => setScrapeUrl(e.target.value)}
-                    placeholder="Paste Amazon/Flipkart product URL…"
+                    placeholder="Paste product URL — sab kuch auto-fill ho jayega…"
                     className="flex-1 h-10 px-4 rounded-xl bg-white/10 text-white placeholder:text-white/30 outline-none border border-white/10 focus:border-primary/60 text-sm"
                   />
                   <motion.button
                     whileTap={{ scale: 0.95 }}
                     onClick={handleScrapeUrl}
                     disabled={scraping}
-                    className="px-4 h-10 rounded-xl bg-gradient-primary text-white text-sm font-semibold disabled:opacity-50"
+                    className="px-4 h-10 rounded-xl bg-gradient-primary text-white text-sm font-semibold disabled:opacity-50 flex items-center gap-1.5"
                   >
-                    {scraping ? "Loading…" : "Start"}
+                    <Sparkles className="h-3.5 w-3.5" />
+                    {scraping ? "Reading…" : "Auto-Fill"}
                   </motion.button>
                 </div>
-                <p className="text-[11px] text-white/40 mt-2">
-                  Auto-fetch backend abhi nahi hai. Link paste karo → form khul jayega, manually title/price/image fill karo. Affiliate link save ho jayegi aur user click karte hi seedha Amazon/Flipkart pe jayega (naya tab).
+                <p className="text-[11px] text-white/50 mt-2 leading-relaxed">
+                  ✅ <b>Auto-detect</b>: Store, brand, category, ASIN/Product-ID, aur Amazon ka product image auto-fill ho jayega.
+                  <br/>📝 <b>Sirf manual</b>: Price, MRP, exact title (Amazon ka). Browser CORS ki wajah se woh fetch nahi ho sakta — apne backend se future me kar lena.
                 </p>
               </div>
 
