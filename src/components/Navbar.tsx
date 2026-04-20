@@ -1,14 +1,17 @@
 import { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import { Heart, ShoppingBag, User, Search, Menu, X, ChevronDown } from "lucide-react";
 import Logo from "./Logo";
 
+const slug = (s: string) => s.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "");
+
 const menus = [
-  { label: "Men", items: ["T-Shirts", "Shirts", "Jeans", "Sneakers", "Watches"] },
-  { label: "Women", items: ["Dresses", "Tops", "Heels", "Handbags", "Jewelry"] },
-  { label: "Electronics", items: ["Smartphones", "Laptops", "Headphones", "Smart Watches", "Cameras"] },
-  { label: "Beauty", items: ["Skincare", "Makeup", "Fragrances", "Haircare", "Wellness"] },
-  { label: "Deals", items: ["Flash Sale", "Trending", "Coupons", "Clearance", "Today Only"] },
+  { label: "Men", slug: "men", items: ["T-Shirts", "Shirts", "Jeans", "Sneakers", "Watches"] },
+  { label: "Women", slug: "women", items: ["Dresses", "Tops", "Heels", "Handbags", "Jewelry"] },
+  { label: "Electronics", slug: "electronics", items: ["Smartphones", "Laptops", "Headphones", "Smart Watches", "Cameras"] },
+  { label: "Beauty", slug: "beauty", items: ["Skincare", "Makeup", "Fragrances", "Haircare", "Wellness"] },
+  { label: "Deals", slug: "deals", items: ["Flash Sale", "Trending", "Coupons", "Clearance", "Today Only"] },
 ];
 
 const Navbar = () => {
@@ -47,7 +50,9 @@ const Navbar = () => {
         }`}
       >
         <div className="container flex items-center gap-4 h-16 md:h-20">
-          <Logo />
+          <Link to="/" aria-label="DealzGalaxy home">
+            <Logo />
+          </Link>
 
           {/* Desktop nav */}
           <nav className="hidden lg:flex items-center gap-1 ml-6">
@@ -58,10 +63,13 @@ const Navbar = () => {
                 onMouseEnter={() => setOpenMenu(m.label)}
                 onMouseLeave={() => setOpenMenu(null)}
               >
-                <button className="flex items-center gap-1 px-4 py-2 rounded-full text-sm font-medium hover:bg-muted transition-colors">
+                <Link
+                  to={`/category/${m.slug}`}
+                  className="flex items-center gap-1 px-4 py-2 rounded-full text-sm font-medium hover:bg-muted transition-colors"
+                >
                   {m.label}
                   <ChevronDown className="h-3.5 w-3.5 opacity-60" />
-                </button>
+                </Link>
                 <AnimatePresence>
                   {openMenu === m.label && (
                     <motion.div
@@ -73,13 +81,14 @@ const Navbar = () => {
                     >
                       <div className="glass rounded-2xl p-3 shadow-elegant">
                         {m.items.map((it) => (
-                          <a
+                          <Link
                             key={it}
-                            href="#"
+                            to={`/category/${m.slug}/${slug(it)}`}
+                            onClick={() => setOpenMenu(null)}
                             className="block px-3 py-2 rounded-lg text-sm hover:bg-primary/10 hover:text-primary transition-colors"
                           >
                             {it}
-                          </a>
+                          </Link>
                         ))}
                       </div>
                     </motion.div>
@@ -153,9 +162,27 @@ const Navbar = () => {
                   />
                 </div>
                 {menus.map((m) => (
-                  <a key={m.label} href="#" className="block px-4 py-3 rounded-xl hover:bg-muted font-medium">
-                    {m.label}
-                  </a>
+                  <div key={m.label} className="rounded-xl overflow-hidden">
+                    <Link
+                      to={`/category/${m.slug}`}
+                      onClick={() => setMobileOpen(false)}
+                      className="block px-4 py-3 hover:bg-muted font-medium"
+                    >
+                      {m.label}
+                    </Link>
+                    <div className="pl-4 pb-2 grid grid-cols-2 gap-1">
+                      {m.items.map((it) => (
+                        <Link
+                          key={it}
+                          to={`/category/${m.slug}/${slug(it)}`}
+                          onClick={() => setMobileOpen(false)}
+                          className="block px-3 py-2 rounded-lg text-sm text-muted-foreground hover:bg-primary/10 hover:text-primary transition-colors"
+                        >
+                          {it}
+                        </Link>
+                      ))}
+                    </div>
+                  </div>
                 ))}
               </div>
             </motion.div>
