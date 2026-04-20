@@ -2,106 +2,109 @@
 @tailwind components;
 @tailwind utilities;
 
-/* DealzGalaxy Design System — premium 2026 ecommerce */
+/* DealzGalaxy Design System — Maroon × Navy premium palette */
 
 @layer base {
   :root {
-    --background: 320 40% 98%;
-    --foreground: 270 30% 12%;
+    /* Light surfaces with deep maroon + navy accents */
+    --background: 210 30% 97%;
+    --foreground: 210 60% 10%;
 
     --card: 0 0% 100%;
-    --card-foreground: 270 30% 12%;
+    --card-foreground: 210 60% 10%;
 
     --popover: 0 0% 100%;
-    --popover-foreground: 270 30% 12%;
+    --popover-foreground: 210 60% 10%;
 
-    --primary: 320 90% 55%;
+    /* Primary = deep maroon/wine */
+    --primary: 350 75% 28%;
     --primary-foreground: 0 0% 100%;
-    --primary-glow: 285 95% 65%;
+    --primary-glow: 350 70% 42%;
 
-    --secondary: 260 85% 60%;
+    /* Secondary = deep navy */
+    --secondary: 212 80% 18%;
     --secondary-foreground: 0 0% 100%;
 
-    --accent: 38 95% 58%;
-    --accent-foreground: 270 30% 12%;
+    /* Accent = warm rose for highlights on dark */
+    --accent: 350 65% 50%;
+    --accent-foreground: 0 0% 100%;
 
-    --muted: 290 30% 95%;
-    --muted-foreground: 270 10% 40%;
+    --muted: 210 25% 93%;
+    --muted-foreground: 212 25% 35%;
 
-    --destructive: 0 84% 60%;
+    --destructive: 0 75% 45%;
     --destructive-foreground: 0 0% 100%;
 
-    --success: 145 70% 45%;
-    --deal: 12 95% 58%;
+    --success: 145 55% 38%;
+    --deal: 350 80% 42%;
 
-    --border: 290 30% 90%;
-    --input: 290 30% 92%;
-    --ring: 320 90% 55%;
+    --border: 210 25% 86%;
+    --input: 210 25% 90%;
+    --ring: 350 75% 28%;
 
     --radius: 1rem;
 
-    /* Gradients */
-    --gradient-primary: linear-gradient(135deg, hsl(320 90% 55%), hsl(285 95% 65%));
-    --gradient-hero: linear-gradient(135deg, hsl(320 90% 55%) 0%, hsl(285 95% 65%) 50%, hsl(260 85% 60%) 100%);
-    --gradient-deal: linear-gradient(135deg, hsl(12 95% 58%), hsl(38 95% 58%));
+    /* Gradients — maroon × navy */
+    --gradient-primary: linear-gradient(135deg, hsl(350 75% 28%), hsl(350 70% 42%));
+    --gradient-hero: linear-gradient(135deg, hsl(350 75% 25%) 0%, hsl(350 60% 35%) 40%, hsl(212 80% 18%) 100%);
+    --gradient-deal: linear-gradient(135deg, hsl(350 80% 42%), hsl(350 90% 55%));
     --gradient-glass: linear-gradient(135deg, hsla(0,0%,100%,0.7), hsla(0,0%,100%,0.3));
-    --gradient-dark: linear-gradient(135deg, hsl(270 50% 12%), hsl(285 50% 18%));
-    --gradient-overlay: linear-gradient(180deg, hsla(270,50%,8%,0.1) 0%, hsla(270,60%,8%,0.7) 100%);
+    --gradient-dark: linear-gradient(135deg, hsl(212 85% 8%), hsl(350 60% 18%));
+    --gradient-overlay: linear-gradient(180deg, hsla(212,85%,6%,0.1) 0%, hsla(212,90%,5%,0.75) 100%);
 
     /* Shadows */
-    --shadow-glow: 0 10px 40px -10px hsl(320 90% 55% / 0.4);
-    --shadow-glow-purple: 0 10px 40px -10px hsl(285 95% 65% / 0.5);
-    --shadow-soft: 0 4px 20px -4px hsl(320 30% 50% / 0.15);
-    --shadow-elegant: 0 20px 60px -20px hsl(270 40% 30% / 0.25);
-    --shadow-deal: 0 0 30px hsl(12 95% 58% / 0.5);
+    --shadow-glow: 0 10px 40px -10px hsl(350 75% 35% / 0.45);
+    --shadow-glow-purple: 0 10px 40px -10px hsl(212 80% 25% / 0.5);
+    --shadow-soft: 0 4px 20px -4px hsl(212 40% 20% / 0.18);
+    --shadow-elegant: 0 20px 60px -20px hsl(212 60% 12% / 0.35);
+    --shadow-deal: 0 0 30px hsl(350 80% 45% / 0.55);
 
-    /* Transitions */
     --transition-smooth: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
     --transition-bounce: all 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
 
-    --sidebar-background: 0 0% 98%;
-    --sidebar-foreground: 240 5.3% 26.1%;
-    --sidebar-primary: 240 5.9% 10%;
-    --sidebar-primary-foreground: 0 0% 98%;
-    --sidebar-accent: 240 4.8% 95.9%;
-    --sidebar-accent-foreground: 240 5.9% 10%;
-    --sidebar-border: 220 13% 91%;
-    --sidebar-ring: 217.2 91.2% 59.8%;
+    --sidebar-background: 210 30% 97%;
+    --sidebar-foreground: 210 60% 12%;
+    --sidebar-primary: 350 75% 28%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 210 25% 93%;
+    --sidebar-accent-foreground: 210 60% 12%;
+    --sidebar-border: 210 25% 86%;
+    --sidebar-ring: 350 75% 28%;
   }
 
   .dark {
-    --background: 270 35% 7%;
-    --foreground: 320 30% 96%;
+    --background: 212 85% 6%;
+    --foreground: 210 30% 96%;
 
-    --card: 270 30% 11%;
-    --card-foreground: 320 30% 96%;
+    --card: 212 70% 10%;
+    --card-foreground: 210 30% 96%;
 
-    --popover: 270 30% 11%;
-    --popover-foreground: 320 30% 96%;
+    --popover: 212 70% 10%;
+    --popover-foreground: 210 30% 96%;
 
-    --primary: 320 90% 60%;
+    --primary: 350 75% 45%;
     --primary-foreground: 0 0% 100%;
-    --primary-glow: 285 95% 70%;
+    --primary-glow: 350 80% 58%;
 
-    --secondary: 260 80% 65%;
+    --secondary: 212 70% 22%;
     --secondary-foreground: 0 0% 100%;
 
-    --accent: 38 95% 60%;
-    --accent-foreground: 270 30% 12%;
+    --accent: 350 75% 55%;
+    --accent-foreground: 0 0% 100%;
 
-    --muted: 270 25% 16%;
-    --muted-foreground: 290 15% 70%;
+    --muted: 212 50% 14%;
+    --muted-foreground: 210 20% 70%;
 
     --destructive: 0 75% 55%;
     --destructive-foreground: 0 0% 100%;
 
-    --border: 270 25% 20%;
-    --input: 270 25% 18%;
-    --ring: 320 90% 60%;
+    --border: 212 50% 18%;
+    --input: 212 50% 16%;
+    --ring: 350 75% 45%;
 
-    --gradient-glass: linear-gradient(135deg, hsla(270,30%,20%,0.6), hsla(270,30%,15%,0.4));
-    --shadow-soft: 0 4px 20px -4px hsl(0 0% 0% / 0.4);
-    --shadow-elegant: 0 20px 60px -20px hsl(0 0% 0% / 0.6);
+    --gradient-glass: linear-gradient(135deg, hsla(212,60%,18%,0.6), hsla(212,60%,12%,0.4));
+    --shadow-soft: 0 4px 20px -4px hsl(0 0% 0% / 0.5);
+    --shadow-elegant: 0 20px 60px -20px hsl(0 0% 0% / 0.7);
   }
 }
 
@@ -130,7 +133,7 @@
   }
 
   .glass-dark {
-    background: hsla(270, 40%, 8%, 0.6);
+    background: hsla(212, 80%, 6%, 0.65);
     backdrop-filter: blur(20px);
     -webkit-backdrop-filter: blur(20px);
     border: 1px solid hsla(0, 0%, 100%, 0.08);
@@ -160,6 +163,10 @@
 
   .bg-gradient-deal {
     background: var(--gradient-deal);
+  }
+
+  .bg-gradient-dark {
+    background: var(--gradient-dark);
   }
 
   .shadow-glow {
