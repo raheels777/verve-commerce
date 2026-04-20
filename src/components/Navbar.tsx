@@ -183,6 +183,22 @@ const Navbar = () => {
           )}
         </AnimatePresence>
       </motion.header>
+
+      {/* Announcement bar — below navbar */}
+      <div className="bg-foreground text-background text-[11px] sm:text-xs md:text-sm py-1.5 sm:py-2 overflow-hidden">
+        <div className="flex whitespace-nowrap animate-marquee">
+          {promos.length > 0 && Array.from({ length: 2 }).map((_, i) => (
+            <div key={i} className="flex items-center gap-8 sm:gap-12 px-4 sm:px-6">
+              {promos.map((p) => (
+                <span key={p.id + "-" + i} className="inline-flex items-center gap-1.5">
+                  <span>{p.emoji}</span>
+                  <span dangerouslySetInnerHTML={{ __html: p.text }} />
+                </span>
+              ))}
+            </div>
+          ))}
+        </div>
+      </div>
     </>
   );
 };
