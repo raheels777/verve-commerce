@@ -4,12 +4,14 @@ import { Heart, ShoppingBag, Star, ArrowLeft, Truck, ShieldCheck, RotateCcw, Che
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import { getProduct, formatINR, products } from "@/data/products";
+import { productStore } from "@/store/adminStore";
 import ProductCard from "@/components/ProductCard";
 import { useState } from "react";
 
 const ProductDetail = () => {
   const { id } = useParams();
-  const product = id ? getProduct(id) : undefined;
+  const adminProducts = productStore.getAll();
+  const product = id ? (getProduct(id) || adminProducts.find((p) => p.id === id)) : undefined;
   const [qty, setQty] = useState(1);
 
   if (!product) {
