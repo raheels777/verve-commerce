@@ -16,6 +16,7 @@ type Slide = {
   cta: string;
   ctaLink: string;
   accent: string;
+  external?: boolean;
 };
 
 const defaultSlides: Slide[] = [
@@ -51,11 +52,12 @@ const defaultSlides: Slide[] = [
 const productToSlide = (p: Product): Slide => ({
   image: p.img || hero1,
   eyebrow: `New · ${p.brand}`,
-  title: p.title.toUpperCase(),
-  subtitle: p.description.slice(0, 60) + "…",
-  cta: "View Product",
-  ctaLink: `/product/${p.id}`,
+  title: (p.title || "Untitled").toUpperCase(),
+  subtitle: (p.description || "").slice(0, 60) + (p.description && p.description.length > 60 ? "…" : ""),
+  cta: p.affiliateUrl ? `Buy on ${p.store || "Store"}` : "View Product",
+  ctaLink: p.affiliateUrl || `/product/${p.id}`,
   accent: "from-primary to-primary-glow",
+  external: !!p.affiliateUrl,
 });
 
 const Hero = () => {
