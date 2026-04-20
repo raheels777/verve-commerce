@@ -36,29 +36,14 @@ const Navbar = () => {
 
   return (
     <>
-      {/* Top announcement bar */}
-      <div className="bg-foreground text-background text-xs sm:text-sm py-2 overflow-hidden">
-        <div className="flex whitespace-nowrap animate-marquee">
-          {promos.length > 0 && Array.from({ length: 2 }).map((_, i) => (
-            <div key={i} className="flex items-center gap-12 px-6">
-              {promos.map((p) => (
-                <span key={p.id + "-" + i}>
-                  {p.emoji} <span dangerouslySetInnerHTML={{ __html: p.text }} />
-                </span>
-              ))}
-            </div>
-          ))}
-        </div>
-      </div>
-
       <motion.header
         initial={{ y: -20, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
         className={`sticky top-0 z-50 transition-all duration-500 ${scrolled ? "bg-background/95 shadow-soft border-b border-border" : "bg-background border-b border-border"}`}
         style={{ backdropFilter: "blur(20px)" }}
       >
-        <div className="container flex items-center gap-4 h-16 md:h-20">
-          <Link to="/" aria-label="DealzGalaxy home">
+        <div className="container flex items-center gap-2 sm:gap-4 h-14 sm:h-16 md:h-20">
+          <Link to="/" aria-label="DealzGalaxy home" className="shrink-0">
             <Logo />
           </Link>
 
