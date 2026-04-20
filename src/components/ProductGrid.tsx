@@ -1,7 +1,11 @@
 import { products } from "@/data/products";
+import { productStore } from "@/store/adminStore";
 import ProductCard from "./ProductCard";
 
 const ProductGrid = () => {
+  const adminProducts = productStore.getAll();
+  const allProducts = [...adminProducts, ...products];
+
   return (
     <section className="container py-14">
       <div className="flex items-end justify-between mb-8">
@@ -24,7 +28,7 @@ const ProductGrid = () => {
       </div>
 
       <div className="grid grid-cols-2 md:grid-cols-3 gap-5">
-        {products.map((p, i) => <ProductCard key={p.id} product={p} index={i} />)}
+        {allProducts.map((p, i) => <ProductCard key={p.id} product={p} index={i} />)}
       </div>
     </section>
   );
