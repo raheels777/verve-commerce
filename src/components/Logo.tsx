@@ -11,7 +11,7 @@ const Logo = ({ className = "" }: { className?: string }) => {
       <img
         src={logoImg}
         alt="DealzGalaxy logo"
-        className="h-10 w-10 sm:h-12 sm:w-12 md:h-14 md:w-14 object-contain shrink-0 drop-shadow-sm"
+        className="h-14 w-14 sm:h-16 sm:w-16 md:h-20 md:w-20 lg:h-24 lg:w-24 object-contain shrink-0 drop-shadow-md"
         loading="eager"
         decoding="async"
       />
