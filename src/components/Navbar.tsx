@@ -45,10 +45,8 @@ const Navbar = () => {
       <motion.header
         initial={{ y: -20, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
-        className="sticky top-0 z-50 transition-all duration-500 shadow-soft"
-        style={{ background: scrolled
-          ? "linear-gradient(90deg, hsl(212 80% 18%) 0%, hsl(280 55% 18%) 50%, hsl(350 75% 20%) 100%)"
-          : "linear-gradient(90deg, hsl(212 80% 24%) 0%, hsl(280 55% 24%) 50%, hsl(350 75% 26%) 100%)", backdropFilter: "blur(20px)" }}
+        className={`sticky top-0 z-50 transition-all duration-500 ${scrolled ? "bg-background/95 shadow-soft border-b border-border" : "bg-background border-b border-border"}`}
+        style={{ backdropFilter: "blur(20px)" }}
       >
         <div className="container flex items-center gap-4 h-16 md:h-20">
           <Link to="/" aria-label="DealzGalaxy home">
@@ -66,7 +64,7 @@ const Navbar = () => {
               >
                 <Link
                   to={`/category/${m.slug}`}
-                  className="flex items-center gap-1 px-4 py-2 rounded-full text-sm font-medium text-white/90 hover:bg-white/15 transition-colors"
+                  className="flex items-center gap-1 px-4 py-2 rounded-full text-sm font-medium text-foreground/80 hover:text-primary hover:bg-muted transition-colors"
                 >
                   {m.label}
                   <ChevronDown className="h-3.5 w-3.5 opacity-60" />
@@ -80,7 +78,7 @@ const Navbar = () => {
                       transition={{ duration: 0.2 }}
                       className="absolute top-full left-0 pt-3 w-56"
                     >
-                      <div className="glass rounded-2xl p-3 shadow-elegant">
+                      <div className="bg-card border border-border rounded-2xl p-3 shadow-elegant">
                         {m.items.map((it) => (
                           <Link
                             key={it}
@@ -102,11 +100,11 @@ const Navbar = () => {
           {/* Search */}
           <div className="hidden md:flex flex-1 max-w-md mx-auto">
             <div className="relative w-full group">
-              <Search className="absolute left-4 top-1/2 -translate-y-1/2 h-4 w-4 text-white/50 group-focus-within:text-white transition-colors" />
+              <Search className="absolute left-4 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground group-focus-within:text-primary transition-colors" />
                 <input
                  type="text"
                  placeholder="Search for products, brands…"
-                 className="w-full h-11 pl-11 pr-4 rounded-full bg-white/15 border border-white/10 focus:border-white/30 focus:bg-white/20 outline-none text-sm text-white placeholder:text-white/50 transition-all"
+                 className="w-full h-11 pl-11 pr-4 rounded-full bg-muted border border-transparent focus:border-primary/30 focus:bg-background outline-none text-sm text-foreground placeholder:text-muted-foreground transition-all"
                />
             </div>
           </div>
@@ -123,9 +121,9 @@ const Navbar = () => {
                 aria-label={label}
                 whileHover={{ scale: 1.1 }}
                 whileTap={{ scale: 0.95 }}
-                className="relative h-10 w-10 flex items-center justify-center rounded-full hover:bg-white/15 transition-colors"
+                className="relative h-10 w-10 flex items-center justify-center rounded-full hover:bg-muted transition-colors"
               >
-                <Icon className="h-5 w-5 text-white" />
+                <Icon className="h-5 w-5 text-foreground" />
                 {badge > 0 && (
                   <span className="absolute top-1 right-1 h-4 w-4 rounded-full bg-gradient-deal text-[10px] font-bold text-primary-foreground flex items-center justify-center shadow-deal">
                     {badge}
@@ -137,9 +135,9 @@ const Navbar = () => {
             <button
               aria-label="Menu"
               onClick={() => setMobileOpen((v) => !v)}
-              className="lg:hidden h-10 w-10 flex items-center justify-center rounded-full hover:bg-white/15"
+              className="lg:hidden h-10 w-10 flex items-center justify-center rounded-full hover:bg-muted"
             >
-              {mobileOpen ? <X className="h-5 w-5 text-white" /> : <Menu className="h-5 w-5 text-white" />}
+              {mobileOpen ? <X className="h-5 w-5 text-foreground" /> : <Menu className="h-5 w-5 text-foreground" />}
             </button>
           </div>
         </div>
