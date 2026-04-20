@@ -15,7 +15,7 @@ const Testimonials = () => {
         <h2 className="font-display font-bold text-3xl md:text-4xl">10,000+ Happy Customers</h2>
       </div>
 
-      <div className="grid md:grid-cols-3 gap-5">
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 sm:gap-5">
         {reviews.map((r, i) => (
           <motion.div
             key={i}

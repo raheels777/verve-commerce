@@ -36,29 +36,14 @@ const Navbar = () => {
 
   return (
     <>
-      {/* Top announcement bar */}
-      <div className="bg-foreground text-background text-xs sm:text-sm py-2 overflow-hidden">
-        <div className="flex whitespace-nowrap animate-marquee">
-          {promos.length > 0 && Array.from({ length: 2 }).map((_, i) => (
-            <div key={i} className="flex items-center gap-12 px-6">
-              {promos.map((p) => (
-                <span key={p.id + "-" + i}>
-                  {p.emoji} <span dangerouslySetInnerHTML={{ __html: p.text }} />
-                </span>
-              ))}
-            </div>
-          ))}
-        </div>
-      </div>
-
       <motion.header
         initial={{ y: -20, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
         className={`sticky top-0 z-50 transition-all duration-500 ${scrolled ? "bg-background/95 shadow-soft border-b border-border" : "bg-background border-b border-border"}`}
         style={{ backdropFilter: "blur(20px)" }}
       >
-        <div className="container flex items-center gap-4 h-16 md:h-20">
-          <Link to="/" aria-label="DealzGalaxy home">
+        <div className="container flex items-center gap-2 sm:gap-4 h-14 sm:h-16 md:h-20">
+          <Link to="/" aria-label="DealzGalaxy home" className="shrink-0">
             <Logo />
           </Link>
 
@@ -131,7 +116,7 @@ const Navbar = () => {
                 onClick={onClick}
                 whileHover={{ scale: 1.1 }}
                 whileTap={{ scale: 0.95 }}
-                className="relative h-10 w-10 flex items-center justify-center rounded-full hover:bg-muted transition-colors"
+                className="relative h-9 w-9 sm:h-10 sm:w-10 flex items-center justify-center rounded-full hover:bg-muted transition-colors"
               >
                 <Icon className="h-5 w-5 text-foreground" />
                 {badge > 0 && (
@@ -145,7 +130,7 @@ const Navbar = () => {
             <button
               aria-label="Menu"
               onClick={() => setMobileOpen((v) => !v)}
-              className="lg:hidden h-10 w-10 flex items-center justify-center rounded-full hover:bg-muted"
+              className="lg:hidden h-9 w-9 sm:h-10 sm:w-10 flex items-center justify-center rounded-full hover:bg-muted"
             >
               {mobileOpen ? <X className="h-5 w-5 text-foreground" /> : <Menu className="h-5 w-5 text-foreground" />}
             </button>
@@ -198,6 +183,22 @@ const Navbar = () => {
           )}
         </AnimatePresence>
       </motion.header>
+
+      {/* Announcement bar — below navbar */}
+      <div className="bg-foreground text-background text-[11px] sm:text-xs md:text-sm py-1.5 sm:py-2 overflow-hidden">
+        <div className="flex whitespace-nowrap animate-marquee">
+          {promos.length > 0 && Array.from({ length: 2 }).map((_, i) => (
+            <div key={i} className="flex items-center gap-8 sm:gap-12 px-4 sm:px-6">
+              {promos.map((p) => (
+                <span key={p.id + "-" + i} className="inline-flex items-center gap-1.5">
+                  <span>{p.emoji}</span>
+                  <span dangerouslySetInnerHTML={{ __html: p.text }} />
+                </span>
+              ))}
+            </div>
+          ))}
+        </div>
+      </div>
     </>
   );
 };

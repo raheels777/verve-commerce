@@ -23,7 +23,7 @@ const PromoHoardings = () => {
         </a>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 sm:gap-5">
         {promos.map((p, i) => (
           <motion.a
             key={p.title}
@@ -33,7 +33,7 @@ const PromoHoardings = () => {
             viewport={{ once: true, margin: "-50px" }}
             transition={{ duration: 0.5, delay: i * 0.1 }}
             whileHover={{ y: -6 }}
-            className="group relative rounded-3xl overflow-hidden h-72 md:h-80 shadow-soft hover:shadow-glow-purple transition-shadow"
+            className="group relative rounded-2xl sm:rounded-3xl overflow-hidden h-56 sm:h-64 md:h-80 shadow-soft hover:shadow-glow-purple transition-shadow"
           >
             <img
               src={p.image}

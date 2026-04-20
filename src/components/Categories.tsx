@@ -21,7 +21,7 @@ const Categories = () => {
         <h2 className="font-display font-bold text-3xl md:text-4xl">Explore the Galaxy</h2>
       </div>
 
-      <div className="grid grid-cols-4 md:grid-cols-8 gap-4">
+      <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-8 gap-3 sm:gap-4">
         {cats.map((c, i) => (
           <motion.div
             key={c.label}
@@ -33,7 +33,7 @@ const Categories = () => {
           >
             <Link to={c.to} className="group flex flex-col items-center gap-3">
               <div className="relative">
-                <div className={`h-16 w-16 md:h-20 md:w-20 rounded-2xl bg-gradient-to-br ${c.color} p-[2px] shadow-soft group-hover:shadow-glow transition-shadow`}>
+                <div className={`h-14 w-14 sm:h-16 sm:w-16 md:h-20 md:w-20 rounded-2xl bg-gradient-to-br ${c.color} p-[2px] shadow-soft group-hover:shadow-glow transition-shadow`}>
                   <div className="h-full w-full rounded-2xl bg-card flex items-center justify-center group-hover:scale-95 transition-transform">
                     <c.icon className="h-7 w-7 md:h-8 md:w-8 text-foreground group-hover:text-primary transition-colors" strokeWidth={1.8} />
                   </div>
