@@ -67,6 +67,73 @@ export const DEFAULT_PROMOS: PromoItem[] = [
   { id: "p5", emoji: "⚡", text: "Flash Sale Ends in 4h" },
 ];
 
+// ===== Video Ad Hoardings (autoplay video banners) =====
+export type VideoAd = {
+  id: string;
+  title: string;
+  subtitle?: string;
+  videoUrl: string; // direct .mp4 / .webm URL OR YouTube watch/embed URL
+  posterUrl?: string; // optional thumbnail before play
+  ctaLabel?: string;
+  ctaUrl?: string;
+  active: boolean;
+};
+
+const VIDEO_ADS_KEY = "dealzgalaxy_video_ads";
+
+export const DEFAULT_VIDEO_ADS: VideoAd[] = [
+  {
+    id: "v1",
+    title: "Mega Fashion Carnival",
+    subtitle: "Upto 80% OFF · Live Now",
+    videoUrl: "https://cdn.coverr.co/videos/coverr-a-shopping-mall-7106/1080p.mp4",
+    posterUrl: "",
+    ctaLabel: "Shop Now",
+    ctaUrl: "/category/men",
+    active: true,
+  },
+];
+
+export const videoAdStore = {
+  getAll(): VideoAd[] {
+    const stored = localStorage.getItem(VIDEO_ADS_KEY);
+    if (!stored) return DEFAULT_VIDEO_ADS;
+    try {
+      const parsed = JSON.parse(stored);
+      return Array.isArray(parsed) ? parsed : DEFAULT_VIDEO_ADS;
+    } catch {
+      return DEFAULT_VIDEO_ADS;
+    }
+  },
+  getActive(): VideoAd[] {
+    return this.getAll().filter((v) => v.active);
+  },
+  save(items: VideoAd[]) {
+    localStorage.setItem(VIDEO_ADS_KEY, JSON.stringify(items));
+    window.dispatchEvent(new Event("video-ads-updated"));
+  },
+  add(item: Omit<VideoAd, "id">) {
+    const all = this.getAll();
+    all.unshift({ ...item, id: "vid-" + Date.now() });
+    this.save(all);
+  },
+  update(id: string, patch: Partial<VideoAd>) {
+    const all = this.getAll();
+    const idx = all.findIndex((v) => v.id === id);
+    if (idx !== -1) {
+      all[idx] = { ...all[idx], ...patch };
+      this.save(all);
+    }
+  },
+  remove(id: string) {
+    this.save(this.getAll().filter((v) => v.id !== id));
+  },
+  reset() {
+    localStorage.removeItem(VIDEO_ADS_KEY);
+    window.dispatchEvent(new Event("video-ads-updated"));
+  },
+};
+
 export const promoStore = {
   getAll(): PromoItem[] {
     const stored = localStorage.getItem(PROMO_KEY);
