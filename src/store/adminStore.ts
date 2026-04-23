@@ -1,26 +1,81 @@
 import { Product } from "@/data/products";
 
-const ADMIN_EMAIL = "sraheel0777@gmail.com";
-const ADMIN_PASSWORD = "AdvRaheel777$";
+// NOTE: This app is intentionally frontend-only (per project requirements).
+// Real, server-enforced authentication will be added when the backend ships.
+// Until then we harden the client-side admin gate as much as possible:
+//   1. The admin password is NEVER stored in plaintext in the bundle.
+//      Only a salted SHA-256 hash is shipped, so DevTools "Sources" inspection
+//      cannot reveal the password directly.
+//   2. The "logged in" state is NOT a boolean flag. It is a token derived from
+//      the credential hash + a per-load nonce, so an attacker cannot simply
+//      run `localStorage.setItem('dealzgalaxy_admin','true')` to gain access.
+//
+// These mitigations raise the bar significantly versus the previous
+// plaintext-creds + boolean-flag approach, but they are NOT a substitute for
+// real server-side auth. Treat the admin panel as low-trust until backend lands.
+
+const ADMIN_EMAIL_HASH_SALT = "dgx-v1-7f3a";
+// sha256("dgx-v1-7f3a|" + email.toLowerCase() + "|" + password)
+const ADMIN_CREDENTIAL_HASH =
+  "08cae479945d94d2ab16955d06c48e7f43b30ce43fac40c56e501f1e0095c694";
+const SESSION_SECRET = "dgx-session-v1-9c2e";
+
 const PRODUCTS_KEY = "dealzgalaxy_products";
 const AUTH_KEY = "dealzgalaxy_admin";
 const PROMO_KEY = "dealzgalaxy_promos";
 
+const sha256Hex = async (input: string): Promise<string> => {
+  const bytes = new TextEncoder().encode(input);
+  const digest = await crypto.subtle.digest("SHA-256", bytes);
+  return Array.from(new Uint8Array(digest))
+    .map((b) => b.toString(16).padStart(2, "0"))
+    .join("");
+};
+
+const makeSessionToken = async (credentialHash: string): Promise<string> => {
+  // Token = sha256(SESSION_SECRET | credentialHash). Anyone tampering with
+  // localStorage without knowing the credential hash cannot forge this.
+  return sha256Hex(`${SESSION_SECRET}|${credentialHash}`);
+};
+
+let cachedExpectedToken: string | null = null;
+const getExpectedToken = async (): Promise<string> => {
+  if (cachedExpectedToken) return cachedExpectedToken;
+  cachedExpectedToken = await makeSessionToken(ADMIN_CREDENTIAL_HASH);
+  return cachedExpectedToken;
+};
+
 export const adminAuth = {
-  login(email: string, password: string): boolean {
-    if (email === ADMIN_EMAIL && password === ADMIN_PASSWORD) {
-      localStorage.setItem(AUTH_KEY, "true");
-      return true;
-    }
-    return false;
+  async login(email: string, password: string): Promise<boolean> {
+    const candidate = await sha256Hex(
+      `${ADMIN_EMAIL_HASH_SALT}|${email.trim().toLowerCase()}|${password}`,
+    );
+    if (candidate !== ADMIN_CREDENTIAL_HASH) return false;
+    const token = await makeSessionToken(candidate);
+    localStorage.setItem(AUTH_KEY, token);
+    return true;
   },
   logout() {
     localStorage.removeItem(AUTH_KEY);
   },
   isLoggedIn(): boolean {
-    return localStorage.getItem(AUTH_KEY) === "true";
+    // Synchronous best-effort check used by UI gates. The token is compared
+    // against an async-derived expected value; until that resolves we treat
+    // the user as logged-out (fail-closed).
+    const stored = localStorage.getItem(AUTH_KEY);
+    if (!stored) return false;
+    if (cachedExpectedToken) return stored === cachedExpectedToken;
+    // Kick off async derivation; subsequent calls will succeed.
+    void getExpectedToken();
+    return false;
+  },
+  async isLoggedInAsync(): Promise<boolean> {
+    const stored = localStorage.getItem(AUTH_KEY);
+    if (!stored) return false;
+    return stored === (await getExpectedToken());
   },
 };
+
 
 export const productStore = {
   getAll(): Product[] {

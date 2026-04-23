@@ -4,6 +4,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { Heart, ShoppingBag, User, Search, Menu, X, ChevronDown } from "lucide-react";
 import Logo from "./Logo";
 import { promoStore, type PromoItem } from "@/store/adminStore";
+import { sanitizePromoHtml } from "@/lib/sanitize";
 
 const slug = (s: string) => s.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "");
 
@@ -192,7 +193,7 @@ const Navbar = () => {
               {promos.map((p) => (
                 <span key={p.id + "-" + i} className="inline-flex items-center gap-1.5">
                   <span>{p.emoji}</span>
-                  <span dangerouslySetInnerHTML={{ __html: p.text }} />
+                  <span dangerouslySetInnerHTML={{ __html: sanitizePromoHtml(p.text) }} />
                 </span>
               ))}
             </div>

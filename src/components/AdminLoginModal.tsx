@@ -14,10 +14,11 @@ const AdminLoginModal = ({ open, onClose, onSuccess }: Props) => {
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError("");
-    if (adminAuth.login(email, password)) {
+    const ok = await adminAuth.login(email, password);
+    if (ok) {
       onSuccess();
       onClose();
     } else {
