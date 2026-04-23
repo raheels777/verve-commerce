@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { X, Plus, Trash2, Edit3, Save, LogOut, Package, Sparkles, Megaphone, RotateCcw } from "lucide-react";
-import { adminAuth, productStore, promoStore, type PromoItem } from "@/store/adminStore";
+import { X, Plus, Trash2, Edit3, Save, LogOut, Package, Sparkles, Megaphone, RotateCcw, Video } from "lucide-react";
+import { adminAuth, productStore, promoStore, videoAdStore, type PromoItem, type VideoAd } from "@/store/adminStore";
 import type { Product } from "@/data/products";
 import { parseAffiliateUrl } from "@/lib/productParser";
 import { fetchProductDetails } from "@/lib/priceFetcher";
@@ -24,7 +24,7 @@ const emptyProduct: Omit<Product, "id"> = {
   images: [],
 };
 
-type Tab = "products" | "promos";
+type Tab = "products" | "promos" | "videos";
 
 const AdminPanel = ({ open, onClose }: { open: boolean; onClose: () => void }) => {
   const [tab, setTab] = useState<Tab>("products");
@@ -37,10 +37,15 @@ const AdminPanel = ({ open, onClose }: { open: boolean; onClose: () => void }) =
   const [promos, setPromos] = useState<PromoItem[]>([]);
   const [editingPromo, setEditingPromo] = useState<(Partial<PromoItem> & { isNew?: boolean }) | null>(null);
 
+  // Video ads state
+  const [videoAds, setVideoAds] = useState<VideoAd[]>([]);
+  const [editingVideo, setEditingVideo] = useState<(Partial<VideoAd> & { isNew?: boolean }) | null>(null);
+
   useEffect(() => {
     if (open) {
       setProducts(productStore.getAll());
       setPromos(promoStore.getAll());
+      setVideoAds(videoAdStore.getAll());
     }
   }, [open]);
 
