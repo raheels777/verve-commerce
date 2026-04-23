@@ -147,6 +147,44 @@ const AdminPanel = ({ open, onClose }: { open: boolean; onClose: () => void }) =
     setPromos(promoStore.getAll());
   };
 
+  // ----- Video ad handlers -----
+  const handleVideoSave = () => {
+    if (!editingVideo) return;
+    const title = (editingVideo.title || "").trim();
+    const videoUrl = (editingVideo.videoUrl || "").trim();
+    if (!title || !videoUrl) {
+      alert("Title aur Video URL dono required hain.");
+      return;
+    }
+    const payload: Omit<VideoAd, "id"> = {
+      title,
+      subtitle: (editingVideo.subtitle || "").trim(),
+      videoUrl,
+      posterUrl: (editingVideo.posterUrl || "").trim(),
+      ctaLabel: (editingVideo.ctaLabel || "").trim(),
+      ctaUrl: (editingVideo.ctaUrl || "").trim(),
+      active: editingVideo.active !== false,
+    };
+    if (editingVideo.isNew) {
+      videoAdStore.add(payload);
+    } else if (editingVideo.id) {
+      videoAdStore.update(editingVideo.id, payload);
+    }
+    setVideoAds(videoAdStore.getAll());
+    setEditingVideo(null);
+  };
+
+  const handleVideoDelete = (id: string) => {
+    if (!confirm("Delete this video ad?")) return;
+    videoAdStore.remove(id);
+    setVideoAds(videoAdStore.getAll());
+  };
+
+  const handleVideoToggle = (id: string, active: boolean) => {
+    videoAdStore.update(id, { active });
+    setVideoAds(videoAdStore.getAll());
+  };
+
   return (
     <AnimatePresence>
       {open && (
@@ -186,6 +224,7 @@ const AdminPanel = ({ open, onClose }: { open: boolean; onClose: () => void }) =
               {[
                 { id: "products" as Tab, label: "Products", icon: Package },
                 { id: "promos" as Tab, label: "Promo Strip", icon: Megaphone },
+                { id: "videos" as Tab, label: "Video Ads", icon: Video },
               ].map((t) => {
                 const Icon = t.icon;
                 const active = tab === t.id;
