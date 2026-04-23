@@ -476,6 +476,127 @@ const AdminPanel = ({ open, onClose }: { open: boolean; onClose: () => void }) =
                 </div>
               </div>
             )}
+
+            {/* ===================== VIDEO ADS TAB ===================== */}
+            {tab === "videos" && (
+              <div className="p-6 space-y-5">
+                <div className="rounded-2xl border border-primary/30 p-4 bg-gradient-to-br from-primary/10 to-secondary/10">
+                  <h3 className="text-sm font-semibold text-white/90 flex items-center gap-2">
+                    <Video className="h-4 w-4 text-primary" /> Video Ad Hoardings
+                  </h3>
+                  <p className="text-[11px] text-white/50 mt-1.5 leading-relaxed">
+                    Yeh video ads homepage pe Hero ke neeche autoplay (muted) chalenge.
+                    <br/>✅ Direct <code className="text-primary">.mp4</code> / <code className="text-primary">.webm</code> URL ya YouTube link dono kaam karenge.
+                    <br/>💡 CTA URL me <code className="text-primary">/category/men</code> jaisa internal route ya full https:// affiliate link daal sakte ho.
+                  </p>
+                </div>
+
+                <motion.button
+                  whileTap={{ scale: 0.97 }}
+                  onClick={() => setEditingVideo({
+                    isNew: true,
+                    title: "",
+                    subtitle: "",
+                    videoUrl: "",
+                    posterUrl: "",
+                    ctaLabel: "Shop Now",
+                    ctaUrl: "",
+                    active: true,
+                  })}
+                  className="w-full flex items-center justify-center gap-2 h-11 rounded-xl border border-dashed border-white/20 text-white/60 hover:text-white hover:border-white/40 transition-colors"
+                >
+                  <Plus className="h-4 w-4" /> Add Video Ad
+                </motion.button>
+
+                {/* Video edit form */}
+                <AnimatePresence>
+                  {editingVideo && (
+                    <motion.div
+                      initial={{ height: 0, opacity: 0 }}
+                      animate={{ height: "auto", opacity: 1 }}
+                      exit={{ height: 0, opacity: 0 }}
+                      className="rounded-2xl border border-primary/30 bg-white/5 overflow-hidden"
+                    >
+                      <div className="p-4 space-y-3">
+                        <h3 className="text-sm font-bold text-white">{editingVideo.isNew ? "New Video Ad" : "Edit Video Ad"}</h3>
+                        <div className="grid grid-cols-2 gap-3">
+                          {[
+                            { key: "title", label: "Title", full: true, placeholder: "Mega Fashion Carnival" },
+                            { key: "subtitle", label: "Subtitle / Tagline", full: true, placeholder: "Upto 80% OFF · Live Now" },
+                            { key: "videoUrl", label: "Video URL (.mp4 / .webm / YouTube link)", full: true, placeholder: "https://...mp4 or YouTube URL" },
+                            { key: "posterUrl", label: "Poster / Thumbnail URL (optional, only for .mp4)", full: true, placeholder: "https://..." },
+                            { key: "ctaLabel", label: "CTA Button Label", placeholder: "Shop Now" },
+                            { key: "ctaUrl", label: "CTA Link (internal /route or https://...)", placeholder: "/category/men" },
+                          ].map(({ key, label, full, placeholder }) => (
+                            <div key={key} className={full ? "col-span-2" : ""}>
+                              <label className="text-[11px] text-white/50 mb-1 block">{label}</label>
+                              <input
+                                value={(editingVideo as any)[key] || ""}
+                                onChange={(e) => setEditingVideo({ ...editingVideo, [key]: e.target.value })}
+                                placeholder={placeholder}
+                                className="w-full h-9 px-3 rounded-lg bg-white/10 text-white text-sm outline-none border border-white/10 focus:border-primary/40"
+                              />
+                            </div>
+                          ))}
+                          <div className="col-span-2 flex items-center gap-2 pt-1">
+                            <input
+                              type="checkbox"
+                              id="vid-active"
+                              checked={editingVideo.active !== false}
+                              onChange={(e) => setEditingVideo({ ...editingVideo, active: e.target.checked })}
+                              className="h-4 w-4 accent-primary"
+                            />
+                            <label htmlFor="vid-active" className="text-xs text-white/70">Active (show on homepage)</label>
+                          </div>
+                        </div>
+                        <div className="flex gap-2 pt-2">
+                          <motion.button whileTap={{ scale: 0.95 }} onClick={handleVideoSave} className="flex-1 h-10 rounded-xl bg-gradient-primary text-white text-sm font-semibold flex items-center justify-center gap-2">
+                            <Save className="h-4 w-4" /> Save
+                          </motion.button>
+                          <button onClick={() => setEditingVideo(null)} className="px-4 h-10 rounded-xl bg-white/10 text-white/60 text-sm">Cancel</button>
+                        </div>
+                      </div>
+                    </motion.div>
+                  )}
+                </AnimatePresence>
+
+                {/* Video list */}
+                <div className="space-y-2">
+                  <h3 className="text-sm font-semibold text-white/60">Video Ads ({videoAds.length})</h3>
+                  {videoAds.length === 0 && <p className="text-white/30 text-sm">No video ads yet. Add one above.</p>}
+                  {videoAds.map((v) => (
+                    <div key={v.id} className="flex items-center gap-3 p-3 rounded-xl bg-white/5 border border-white/10">
+                      <div className="h-12 w-16 rounded-lg bg-black/40 flex items-center justify-center shrink-0 overflow-hidden">
+                        {v.posterUrl ? (
+                          <img src={v.posterUrl} alt={v.title} className="h-full w-full object-cover" />
+                        ) : (
+                          <Video className="h-5 w-5 text-white/40" />
+                        )}
+                      </div>
+                      <div className="flex-1 min-w-0">
+                        <p className="text-sm font-medium text-white truncate">{v.title}</p>
+                        <p className="text-xs text-white/40 truncate">{v.subtitle || v.videoUrl}</p>
+                      </div>
+                      <label className="flex items-center gap-1.5 text-[11px] text-white/60 cursor-pointer">
+                        <input
+                          type="checkbox"
+                          checked={v.active}
+                          onChange={(e) => handleVideoToggle(v.id, e.target.checked)}
+                          className="h-3.5 w-3.5 accent-primary"
+                        />
+                        Live
+                      </label>
+                      <button onClick={() => setEditingVideo(v)} className="p-2 rounded-lg hover:bg-white/10 text-white/50 hover:text-white">
+                        <Edit3 className="h-4 w-4" />
+                      </button>
+                      <button onClick={() => handleVideoDelete(v.id)} className="p-2 rounded-lg hover:bg-red-500/20 text-white/50 hover:text-red-400">
+                        <Trash2 className="h-4 w-4" />
+                      </button>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
           </motion.div>
         </motion.div>
       )}
