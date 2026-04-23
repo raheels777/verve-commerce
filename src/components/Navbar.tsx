@@ -192,7 +192,7 @@ const Navbar = () => {
               {promos.map((p) => (
                 <span key={p.id + "-" + i} className="inline-flex items-center gap-1.5">
                   <span>{p.emoji}</span>
-                  <span dangerouslySetInnerHTML={{ __html: p.text }} />
+                  <span dangerouslySetInnerHTML={{ __html: sanitizePromoHtml(p.text) }} />
                 </span>
               ))}
             </div>

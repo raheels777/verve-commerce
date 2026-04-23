@@ -439,7 +439,7 @@ const AdminPanel = ({ open, onClose }: { open: boolean; onClose: () => void }) =
                           Preview:{" "}
                           <span className="text-white/90">
                             {editingPromo.emoji}{" "}
-                            <span dangerouslySetInnerHTML={{ __html: editingPromo.text || "" }} />
+                            <span dangerouslySetInnerHTML={{ __html: sanitizePromoHtml(editingPromo.text || "") }} />
                           </span>
                         </div>
                         <div className="flex gap-2 pt-1">
@@ -463,7 +463,7 @@ const AdminPanel = ({ open, onClose }: { open: boolean; onClose: () => void }) =
                         {p.emoji}
                       </div>
                       <div className="flex-1 min-w-0">
-                        <p className="text-sm font-medium text-white truncate" dangerouslySetInnerHTML={{ __html: p.text }} />
+                        <p className="text-sm font-medium text-white truncate" dangerouslySetInnerHTML={{ __html: sanitizePromoHtml(p.text) }} />
                       </div>
                       <button onClick={() => setEditingPromo(p)} className="p-2 rounded-lg hover:bg-white/10 text-white/50 hover:text-white">
                         <Edit3 className="h-4 w-4" />
