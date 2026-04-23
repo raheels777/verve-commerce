@@ -4,14 +4,14 @@ import logoImg from "@/assets/logo.png";
 const Logo = ({ className = "" }: { className?: string }) => {
   return (
     <motion.div
-      className={`flex items-center gap-2 sm:gap-2.5 ${className}`}
+      className={`flex items-center gap-1 sm:gap-1.5 ${className}`}
       whileHover={{ scale: 1.03 }}
       transition={{ type: "spring", stiffness: 300 }}
     >
       <img
         src={logoImg}
         alt="DealzGalaxy logo"
-        className="h-14 w-14 sm:h-16 sm:w-16 md:h-20 md:w-20 lg:h-24 lg:w-24 object-contain shrink-0 drop-shadow-md"
+        className="h-20 w-20 sm:h-24 sm:w-24 md:h-28 md:w-28 lg:h-32 lg:w-32 object-contain shrink-0 drop-shadow-lg"
         loading="eager"
         decoding="async"
       />
