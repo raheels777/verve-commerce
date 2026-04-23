@@ -1,6 +1,7 @@
 import Navbar from "@/components/Navbar";
 import Hero from "@/components/Hero";
 import PromoHoardings from "@/components/PromoHoardings";
+import VideoAdHoarding from "@/components/VideoAdHoarding";
 import Categories from "@/components/Categories";
 import TrendingDeals from "@/components/TrendingDeals";
 import FlashSaleStrip from "@/components/FlashSaleStrip";
@@ -20,6 +21,7 @@ const Index = () => {
       <Navbar />
       <main>
         <Hero />
+        <VideoAdHoarding />
         <PromoHoardings />
         <Categories />
         <TrendingDeals />
