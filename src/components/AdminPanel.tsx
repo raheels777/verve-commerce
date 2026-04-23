@@ -5,6 +5,7 @@ import { adminAuth, productStore, promoStore, videoAdStore, type PromoItem, type
 import type { Product } from "@/data/products";
 import { parseAffiliateUrl } from "@/lib/productParser";
 import { fetchProductDetails } from "@/lib/priceFetcher";
+import { sanitizePromoHtml } from "@/lib/sanitize";
 
 const emptyProduct: Omit<Product, "id"> = {
   img: "",

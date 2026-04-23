@@ -4,6 +4,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { Heart, ShoppingBag, User, Search, Menu, X, ChevronDown } from "lucide-react";
 import Logo from "./Logo";
 import { promoStore, type PromoItem } from "@/store/adminStore";
+import { sanitizePromoHtml } from "@/lib/sanitize";
 
 const slug = (s: string) => s.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "");
 
